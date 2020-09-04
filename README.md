@@ -3,7 +3,7 @@
 This connector provides a source (```OracleInputFormat```), a sink/output
 (```OracleSink``` and ```OracleOutputFormat```, respectively),
  as well a table source (`OracleTableSource`), an upsert table sink (`OracleTableSink`), and a catalog (`OracleCatalog`),
- to allow reading and writing to [Oracle](https://kudu.apache.org/).
+ to allow reading and writing to [Oracle](https://oracle.apache.org/).
 
 To use this connector, add the following dependency to your project:
 
@@ -15,7 +15,7 @@ See how to link with them for cluster execution [here](https://ci.apache.org/pro
 
 ## Installing Oracle
 
-Follow the instructions from the [Oracle Installation Guide](https://kudu.apache.org/docs/installation.html).
+Follow the instructions from the [Oracle Installation Guide](https://oracle.apache.org/docs/installation.html).
 Optionally, you can use the docker images provided in dockers folder.
 
 ## SQL and Table API
@@ -44,7 +44,7 @@ flink-sql:
       password: oracle
 ```
 
-Once the SQL CLI is started you can simply switch to the Oracle catalog by calling `USE CATALOG kudu;`
+Once the SQL CLI is started you can simply switch to the Oracle catalog by calling `USE CATALOG oracle;`
 
 You can also create and use the OracleCatalog directly in the Table environment:
 
@@ -63,14 +63,14 @@ You can also create and use the OracleCatalog directly in the Table environment:
 It is possible to manipulate Oracle tables using SQL DDL.
 
 When not using the Oracle catalog, the following additional properties must be specified in the `WITH` clause:
-* `'connector.type'='kudu'`
-* `'kudu.masters'='host1:port1,host2:port2,...'`: comma-delimitered list of Oracle masters
-* `'kudu.table'='...'`: The table's name within the Oracle database.
+* `'connector.type'='oracle'`
+* `'oracle.masters'='host1:port1,host2:port2,...'`: comma-delimitered list of Oracle masters
+* `'oracle.table'='...'`: The table's name within the Oracle database.
 
 If you have registered and are using the Oracle catalog, these properties are handled automatically.
 
-To create a table, the additional properties `kudu.primary-key-columns` and `kudu.hash-columns` must be specified
-as comma-delimited lists. Optionally, you can set the `kudu.replicas` property (defaults to 1).
+To create a table, the additional properties `oracle.primary-key-columns` and `oracle.hash-columns` must be specified
+as comma-delimited lists. Optionally, you can set the `oracle.replicas` property (defaults to 1).
 Other properties, such as range partitioning, cannot be configured here - for more flexibility, please use
 `catalog.createTable` as described in [this](#Creating-a-OracleTable-directly-with-OracleCatalog) section or create the table directly in Oracle.
 
@@ -154,9 +154,9 @@ including schema, partitioning, replication, etc. can be specified using a `Orac
 
 Use the `createTableIfNotExists` method, that takes a `ColumnSchemasFactory` and
 a `CreateTableOptionsFactory` parameter, that implement respectively `getColumnSchemas()`
-returning a list of Oracle [ColumnSchema](https://kudu.apache.org/apidocs/org/apache/kudu/ColumnSchema.html) objects;
+returning a list of Oracle [ColumnSchema](https://oracle.apache.org/apidocs/org/apache/oracle/ColumnSchema.html) objects;
  and  `getCreateTableOptions()` returning a
-[CreateTableOptions](https://kudu.apache.org/apidocs/org/apache/kudu/client/CreateTableOptions.html) object.
+[CreateTableOptions](https://oracle.apache.org/apidocs/org/apache/oracle/client/CreateTableOptions.html) object.
 
 This example shows the creation of a table called `ExampleTable` with two columns,
 `first` being a primary key; and configuration of replicas and hash partitioning.
@@ -195,7 +195,7 @@ Note:
 
 ### Known limitations
 * Data type limitations (see above).
-* SQL Create table: primary keys can only be set by the `kudu.primary-key-columns` property, using the
+* SQL Create table: primary keys can only be set by the `oracle.primary-key-columns` property, using the
 `PRIMARY KEY` constraint is not yet possible.
 * SQL Create table: range partitioning is not supported.
 * When getting a table through the Catalog, NOT NULL and PRIMARY KEY constraints are ignored. All columns
@@ -221,8 +221,8 @@ This is how it works in practice:
 ```java
 StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, tableSettings);
 
-tableEnv.registerCatalog("kudu", new OracleCatalog("master:port"));
-tableEnv.useCatalog("kudu");
+tableEnv.registerCatalog("oracle", new OracleCatalog("master:port"));
+tableEnv.useCatalog("oracle");
 
 Table table = tableEnv.sqlQuery("SELECT * FROM MyOracleTable");
 DataStream<Row> rows = tableEnv.toAppendStream(table, Row.class);
@@ -257,7 +257,6 @@ we could pass a `OracleTableInfo` as described in the [Catalog - Creating a tabl
 and the sink would create the table with the provided configuration.
 
 ```java
-OracleWriterConfig writerConfig = OracleWriterConfig.Builder.setMasters(KUDU_MASTERS).build();
 
 OracleSink<Row> sink = new OracleSink<>(
     writerConfig,
