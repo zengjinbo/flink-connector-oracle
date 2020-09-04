@@ -313,5 +313,5 @@ The integration tests rely on the Oracle test harness which requires the current
 This might not work out of the box on some operating systems (such as Mac OS X).
 To solve this problem go to *System Preferences/Sharing* and enable Remote login for your user.
 
-##Function realization reference
+## All Function realization reference
    [ Flink Kudu Connector](https://github.com/apache/bahir-flink/tree/master/flink-connector-kudu#flink-kudu-connector)
