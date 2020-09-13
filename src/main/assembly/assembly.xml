@@ -1,0 +1,60 @@
+<assembly>
+    <id>assembly</id>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+<!--        <fileSet>
+            <directory>src/main/bin</directory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>-->
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/classes/</directory>
+            <includes>
+                <include>*.properties</include>
+                <include>*.json</include>
+                <include>*.yaml</include>
+            </includes>
+            <outputDirectory>conf</outputDirectory>
+        </fileSet>
+    </fileSets>
+
+    <files>
+        <file>
+            <source>target/${project.artifactId}-${project.version}.jar</source>
+            <outputDirectory>.</outputDirectory>
+        </file>
+    </files>
+
+    <dependencySets>
+    <dependencySet>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+           <!-- <scope>runtime</scope>-->
+            <unpack>false</unpack>
+            <scope>system</scope>
+            <excludes>
+                <exclude>junit:junit</exclude>
+                <exclude>slf4j:slf4j</exclude>
+            </excludes>
+        </dependencySet>
+
+    </dependencySets>
+</assembly>
